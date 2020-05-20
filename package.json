@@ -1,0 +1,8 @@
+{
+  "name": "blogify-sql",
+  "version": "1.0.0",
+  "description": "An app that allows users create blog posts",
+  "main": "app.js",
+  "author": "AbdulRazaq Suleiman",
+  "license": "MIT"
+}
