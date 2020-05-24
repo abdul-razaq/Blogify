@@ -4,7 +4,6 @@ import { successResponse, errorResponse } from '../helpers/responses'
 import AppError from '../helpers/Errors/AppError'
 import Errors from '../helpers/Errors/Errors'
 
-
 export default {
 	signUp: async (req, res, next) => {
 		Errors.sendValidationError(req, next)
@@ -30,7 +29,7 @@ export default {
 			const userId = await user.save()
 			const token = await User.generateToken(userId, email)
 			const data = { token, userId }
-			successResponse(201, 'User Account successfully created!', data)
+			successResponse(res, 201, 'User Account successfully created!', data)
 		} catch (error) {
 			errorResponse(error, next)
 		}
@@ -53,5 +52,43 @@ export default {
 	},
 
 	logout: async (req, res, next) => {
+		try {
+			await User.removeToken(req.token, req.userId)
+			successResponse(res, 200, 'User logged out successfully')
+		} catch (error) {
+			errorResponse(error, next)
+		}
+	},
+
+	updatePassword: async (req, res, next) => {
+		try {
+			const old_password = req.body.old_password
+			const user = await User.findUser(req.userId, req.email)
+			if (!(await argon2.verify(user.password, old_password))) {
+				throw new AppError(403, 'Please provide correct old password!')
+			}
+			await User.changePassword(req.userId, req.body.new_password)
+			successResponse(res, 201, 'Password updated successfully')
+		} catch (error) {
+			errorResponse(error, next)
+		}
+	},
+
+	getProfile: async (req, res, next) => {
+		try {
+			const {
+				firstname,
+				lastname,
+				email,
+				profile_url,
+				gender,
+				date_joined,
+				bio,
+			} = await User.findUser(req.userId, req.email)
+			const profile = { firstname, lastname, email, profile_url, gender, date_joined, bio }
+			successResponse(res, 200, 'User profile details!', profile)
+		} catch (error) {
+			errorResponse(error, next)
+		}
 	},
 }

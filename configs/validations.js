@@ -52,3 +52,25 @@ export const loginValidator = [
 		.isLength({ min: 8 })
 		.withMessage('password must be 8 characters or more'),
 ]
+
+export const passwordValidator = [
+	body('old_password', 'supply old password')
+		.trim()
+		.isAlphanumeric()
+		.withMessage('password must be alphanumeric')
+		.isLength({ min: 8 })
+		.withMessage('password must be 8 characters or more'),
+
+	body('new_password', 'supply new password')
+		.trim()
+		.isAlphanumeric()
+		.withMessage('password must be alphanumeric')
+		.isLength({ min: 8 })
+		.withMessage('password must be 8 characters or more'),
+
+	body('confirm_new_password', 'please confirm new password').custom(
+		(value, { req }) => {
+			return value === req.body.new_password
+		}
+	).withMessage('passwords have to match'),
+]

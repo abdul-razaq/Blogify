@@ -34,5 +34,5 @@ createTables()
 		})
 	})
 	.catch(() => {
-		console.log(chalk.red.bold('Unable to finish migrations'))
+		console.log(chalk.red.bold('Error performing migrations'))
 	})

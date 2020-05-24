@@ -11,11 +11,11 @@ export default async (req, res, next) => {
 		if (!authHeader || typeof token === 'undefined') {
 			throw new AppError('401', 'Please authenticate!')
 		}
-		const { userId, email } = jwt.verify(token, process.env.JWT_SECRET)
-		const userExists = await User.findUser(userId, email)
+		const { id, email } = jwt.verify(token, process.env.JWT_SECRET)
+		const userExists = await User.findUserWithToken(id, email, token)
 		if (!userExists)
-			throw new AppError('403', 'Invalid token, Please authenticate!')
-		req.userId = userId
+			throw new AppError('401', 'Invalid token, Please authenticate!')
+		req.userId = id
 		req.email = email
 		req.token = token
 		next()
