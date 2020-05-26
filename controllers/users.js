@@ -1,8 +1,9 @@
 import argon2 from 'argon2'
+
 import User from '../models/User'
-import { successResponse, errorResponse } from '../helpers/responses'
 import AppError from '../helpers/Errors/AppError'
 import Errors from '../helpers/Errors/Errors'
+import { successResponse, errorResponse } from '../helpers/responses'
 
 export default {
 	signUp: async (req, res, next) => {
@@ -17,6 +18,10 @@ export default {
 				gender,
 				bio,
 			} = req.body
+			const exists = await User.findUser(null, email)
+			if (exists) {
+				throw new AppError(406, 'Email address already taken!')
+			}
 			const user = new User(
 				firstname,
 				lastname,
@@ -91,4 +96,30 @@ export default {
 			errorResponse(error, next)
 		}
 	},
+
+	updateProfile: async (req, res, next) => {
+		console.log(req.body)
+		Errors.sendValidationError(req, next)
+		try {
+			const { firstname, lastname, email, profile_url, gender, bio } = req.body
+			const exists = await User.findUser(null, email)
+			if (exists) {
+				throw new AppError(406, 'Email address already taken!')
+			}
+			await User.updateProfile(req.userId, firstname, lastname, email, profile_url, gender, bio)
+			successResponse(res, 201, 'Profile updated successfully')
+		} catch (error) {
+			errorResponse(error, next)
+		}
+	},
+
+	deleteUser: async (req, res, next) => {
+		try {
+			await User.deleteUser(req.userId, req.email)
+			await User.removeToken(req.token, req.userId)
+			successResponse(res, 200, 'User successfully deleted')
+		} catch (error) {
+			errorResponse(error, next)
+		}
+	}
 }

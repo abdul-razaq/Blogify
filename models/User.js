@@ -1,6 +1,7 @@
-import dbConnection from '../configs/database'
 import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
+
+import dbConnection from '../configs/database'
 
 export default class User {
 	constructor(
@@ -69,7 +70,7 @@ export default class User {
 	}
 
 	static async deleteUser(userId, email) {
-		const query = 'DELETE FROM users WHERE id = ? OR email = ?'
+		const query = 'DELETE FROM users WHERE users.id = ? AND users.email = ?'
 		return await dbConnection.execute(query, [userId, email])
 	}
 
@@ -86,5 +87,11 @@ export default class User {
 		} catch (error) {
 			throw error
 		}
+	}
+
+	static async updateProfile(user_id, firstname, lastname, email, profile_url, gender, bio) {
+		const user = await User.findUser(user_id, null)
+		const query = 'UPDATE users SET firstname = ?, lastname = ?, email = ?, profile_url = ?, gender = ?, bio = ? WHERE users.id = ?'
+		return await dbConnection.execute(query, [firstname, lastname, email, profile_url || user.profile_url, gender, bio || user.bio, user_id])
 	}
 }

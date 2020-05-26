@@ -1,4 +1,5 @@
 import { validationResult } from 'express-validator'
+import AppError from '../Errors/AppError'
 
 export default {
 	generalError: (error, req, res, next) => {
@@ -19,9 +20,8 @@ export default {
 	sendValidationError: (req, next) => {
 		const errors = validationResult(req)
 		if (!errors.isEmpty()) {
-			const error = new Error('Input validation failed! check input values')
-			error.status = 406
-			error.data = errors.array().map(error => error.msg)
+			const data = errors.array().map(error => error.msg)
+			const error = new AppError(406, 'Input validation failed! check input values', data)
 			return next(error)
 		}
 	}

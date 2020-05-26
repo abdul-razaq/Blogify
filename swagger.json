@@ -1,0 +1,359 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"title": "Blogify API",
+		"description": "Blogify app is a blog app",
+		"version": "1.0",
+		"contact": {
+			"name": "Ant1g3n",
+			"url": "https://github.com/ant1g3n",
+			"email": "razaqayomide01@gmail.com"
+		},
+		"license": {
+			"name": "MIT"
+		},
+		"termsOfService": "This API is free to consume by any application developer"
+	},
+	"host": "localhost:5000",
+	"basePath": "/v1/api",
+	"schemes": ["http", "https"],
+	"consumes": ["application/x-www-form-urlencoded", "application/json"],
+	"produces": ["application/json"],
+	"tags": [
+		{
+			"name": "blogify",
+			"description": "A blog api to build any blog application"
+		}
+	],
+	"paths": {
+		"/auth/signup": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "Users can create an account",
+				"description": "This endpoint uses post request to create users",
+				"operationId": "signup",
+				"consumes": ["application/x-www-form-urlencoded"],
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "firstname",
+						"in": "formData",
+						"description": "user's firstname",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "lastname",
+						"in": "formData",
+						"description": "user's lastname",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "email",
+						"in": "formData",
+						"description": "user's email address",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "password",
+						"in": "formData",
+						"description": "user's password",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "confirm_password",
+						"in": "formData",
+						"description": "user's confirmed password",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "profile_url",
+						"in": "formData",
+						"description": "user's profile picture",
+						"type": "file",
+						"required": false
+					},
+					{
+						"name": "gender",
+						"in": "formData",
+						"description": "user's gender",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "bio",
+						"in": "formData",
+						"description": "user's bio",
+						"type": "string",
+						"required": false
+					}
+				],
+				"responses": {
+					"405": {
+						"description": "Input validation failed! check input values"
+					},
+					"406": {
+						"description": "Email address already taken!"
+					},
+					"201": {
+						"description": "User Account successfully created!"
+					},
+					"500": {
+						"description": "Internal server error / general error"
+					}
+				}
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "Users can login to their account",
+				"description": "This endpoint uses post request to login users",
+				"operationId": "login",
+				"consumes": ["application/x-www-form-urlencoded", "application/json"],
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "email",
+						"in": "formData",
+						"description": "user's email address",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "password",
+						"in": "formData",
+						"description": "user's password",
+						"type": "string",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User logged in successfully!"
+					},
+					"405": {
+						"description": "Input validation failed! check input values"
+					},
+					"401": {
+						"description": "Unable to login user, check your credentials!"
+					},
+					"500": {
+						"description": "Internal server error / general error"
+					}
+				}
+			}
+		},
+		"/auth/logout": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "Users can logout of their account",
+				"description": "This endpoint uses post request to logout users",
+				"operationId": "logout",
+				"consumes": ["application/json"],
+				"produces": ["application/json"],
+				"responses": {
+					"200": {
+						"description": "User logged out successfully"
+					},
+					"401": {
+						"description": "Invalid token, please authenticate"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				]
+			}
+		},
+		"/auth/password/update": {
+			"patch": {
+				"tags": ["Auth"],
+				"summary": "Users can change their password",
+				"description": "This endpoint uses patch request to update the user's password",
+				"operationId": "passwordUpdate",
+				"consumes": ["application/x-www-form-urlencoded"],
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "old_password",
+						"in": "formData",
+						"type": "string",
+						"description": "User's old password",
+						"required": true
+					},
+					{
+						"name": "new_password",
+						"in": "formData",
+						"type": "string",
+						"description": "User's new password",
+						"required": true
+					},
+					{
+						"name": "confirm_new_password",
+						"in": "formData",
+						"type": "string",
+						"description": "User's new password confirm",
+						"required": true
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Password updated successfully"
+					},
+					"401": {
+						"description": "Invalid token, please authenticate"
+					},
+					"403": {
+						"description": "Please provide correct old password"
+					},
+					"405": {
+						"description": "Input validation failed! check input values"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				]
+			}
+		},
+		"/auth/user/profile": {
+			"get": {
+				"tags": ["Auth"],
+				"summary": "User's can get their profile details",
+				"description": "This endpoint uses get request to fetch the user's profile details",
+				"operationId": "userProfile",
+				"consumes": ["application/json"],
+				"produces": ["application/json"],
+				"responses": {
+					"200": {
+						"description": "User profile details!"
+					},
+					"401": {
+						"description": "Invalid token, please authenticate"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				]
+			}
+		},
+		"/auth/user/profile/edit": {
+			"patch": {
+				"tags": ["Auth"],
+				"summary": "User's can edit their profile details",
+				"description": "This endpoint uses patch request to edit the user's profile",
+				"operationId": "editUserProfile",
+				"consumes": ["application/x-www-form-urlencoded"],
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "firstname",
+						"in": "formData",
+						"description": "user's firstname",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "lastname",
+						"in": "formData",
+						"description": "user's lastname",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "email",
+						"in": "formData",
+						"description": "user's email address",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "profile_url",
+						"in": "formData",
+						"description": "user's profile picture",
+						"type": "file",
+						"required": false
+					},
+					{
+						"name": "gender",
+						"in": "formData",
+						"description": "user's gender",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "bio",
+						"in": "formData",
+						"description": "user's bio",
+						"type": "string",
+						"required": false
+					}
+				],
+				"responses": {
+					"401": {
+						"description": "Invalid token, please authenticate"
+					},
+					"405": {
+						"description": "Input validation failed! check input values"
+					},
+					"406": {
+						"description": "Email address already taken!"
+					},
+					"201": {
+						"description": "Profile updated successfully"
+					},
+					"500": {
+						"description": "Internal server error / general error"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				]
+			}
+		},
+		"/auth/user/delete": {
+			"delete": {
+				"tags": ["Auth"],
+				"summary": "Users can decide to delete their account",
+				"description": "This endpoint uses delete request to delete a user's account",
+				"operationId": "deleteUser",
+				"consumes": ["application/json"],
+				"produces": ["application/json"],
+				"responses": {
+					"500": {
+						"description": "Internal server error / general error"
+					},
+					"401": {
+						"description": "Invalid token, please authenticate"
+					},
+					"200": {
+						"description": "User successfully deleted"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				]
+			}
+		}
+	},
+	"securityDefinitions": {
+		"JWT": {
+			"type": "apiKey",
+			"name": "authorization",
+			"in": "header"
+		}
+	}
+}
