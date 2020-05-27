@@ -81,3 +81,18 @@ export const profileUpdateValidator = [
 		.withMessage('Enter a valid email address'),
 	body('gender', 'gender is required').trim().isLength({ min: 1, max: 1 }),
 ]
+
+export const newPostValidator = [
+	body('title', 'post title is required')
+		.trim()
+		.isLength({ min: 5, max: 100 })
+		.withMessage('title must be between 5 and 100'),
+	body('content', 'post content is required')
+		.trim()
+		.isLength({ min: 10, max: 255 })
+		.withMessage('post content must be between 10 and 255'),
+	body('category', 'post category is required')
+		.trim()
+		.isLength({ min: 3, max: 10 })
+		.withMessage('post category must be between 3 and 10'),
+]

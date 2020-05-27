@@ -98,7 +98,6 @@ export default {
 	},
 
 	updateProfile: async (req, res, next) => {
-		console.log(req.body)
 		Errors.sendValidationError(req, next)
 		try {
 			const { firstname, lastname, email, profile_url, gender, bio } = req.body
