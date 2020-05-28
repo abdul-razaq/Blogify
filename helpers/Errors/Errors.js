@@ -3,6 +3,10 @@ import AppError from '../Errors/AppError'
 
 export default {
 	generalError: (error, req, res, next) => {
+		if (!error.status && error.message) {
+			error.status = 500
+			error.message = 'Internal server error'
+		}
 		return res.status(error.status).json({
 			status: 'error',
 			message: error.message,

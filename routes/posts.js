@@ -15,4 +15,12 @@ router.post(
 	PostControllers.createPost
 )
 
+router.get('/feeds', authenticate, PostControllers.getFeeds)
+
+router.delete('/:postId', authenticate, PostControllers.deletePost)
+
+router.get('/:postId', authenticate, PostControllers.getAPost)
+
+router.get('/', authenticate, PostControllers.getAllPosts)
+
 export default router

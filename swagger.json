@@ -2,8 +2,8 @@
 	"swagger": "2.0",
 	"info": {
 		"title": "Blogify API",
-		"description": "Blogify app is a blog app",
-		"version": "1.0",
+		"description": "Blogify is a web application for creating posts that others can read, comment, like e.t.c",
+		"version": "1.0.0",
 		"contact": {
 			"name": "Ant1g3n",
 			"url": "https://github.com/ant1g3n",
@@ -15,7 +15,7 @@
 		"termsOfService": "This API is free to consume by any application developer"
 	},
 	"host": "localhost:5000",
-	"basePath": "/v1/api",
+	"basePath": "/api/v1",
 	"schemes": ["http", "https"],
 	"consumes": ["application/x-www-form-urlencoded", "application/json"],
 	"produces": ["application/json"],
@@ -339,6 +339,138 @@
 					},
 					"200": {
 						"description": "User successfully deleted"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				]
+			}
+		},
+		"/posts": {
+			"post": {
+				"tags": ["Posts"],
+				"summary": "Users can create posts",
+				"description": "This endpoint uses post request to create a new post",
+				"operationId": "createPost",
+				"consumes": ["application/x-www-form-urlencoded"],
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "title",
+						"in": "formData",
+						"type": "string",
+						"description": "post title",
+						"required": true
+					},
+					{
+						"name": "content",
+						"in": "formData",
+						"type": "string",
+						"description": "post content",
+						"required": true
+					},
+					{
+						"name": "image_url",
+						"in": "formData",
+						"type": "file",
+						"description": "post image",
+						"required": false
+					},
+					{
+						"name": "category",
+						"in": "formData",
+						"type": "string",
+						"description": "post category",
+						"required": true
+					}
+				],
+				"responses": {
+					"401": {
+						"description": "Invalid token, please authenticate"
+					},
+					"405": {
+						"description": "Input validation failed! check input values"
+					},
+					"201": {
+						"description": "Post created successfully"
+					},
+					"500": {
+						"description": "Internal server error / general error"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				]
+			}
+		},
+		"/posts/{postId}": {
+			"delete": {
+				"tags": ["Posts"],
+				"summary": "Authors can delete their post",
+				"description": "This endpoint uses delete request to allow authors delete their posts",
+				"operationId": "deletePost",
+				"consumes": ["application/x-www-form-urlencoded"],
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "postId",
+						"in": "path",
+						"type": "string",
+						"required": true,
+						"description": "post id to delete"
+					}
+				],
+				"responses": {
+					"401": {
+						"description": "Invalid token, please authenticate"
+					},
+					"200": {
+						"description": "Post deleted successfully!"
+					},
+					"500": {
+						"description": "Internal server error / general error"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				]
+			}
+		},
+		"/posts/{postID}": {
+			"get": {
+				"tags": ["Posts"],
+				"summary": "Authors can retrieve a post",
+				"description": "This endpoint uses get request to allow authors read a particular post",
+				"operationId": "readPost",
+				"consumes": ["application/x-www-form-urlencoded"],
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "postId",
+						"in": "path",
+						"type": "string",
+						"required": true,
+						"description": "post id to read"
+					}
+				],
+				"responses": {
+					"401": {
+						"description": "Invalid token, please authenticate"
+					},
+					"200": {
+						"description": "Post found!"
+					},
+					"500": {
+						"description": "Internal server error / general error"
+					},
+					"404": {
+						"description": "Post not found"
 					}
 				},
 				"security": [

@@ -82,6 +82,16 @@ export const profileUpdateValidator = [
 	body('gender', 'gender is required').trim().isLength({ min: 1, max: 1 }),
 ]
 
+const postCategories = [
+	'Tech',
+	'Misc',
+	'Education',
+	'Politics',
+	'Religion',
+	'Health',
+	'Fashion'
+]
+
 export const newPostValidator = [
 	body('title', 'post title is required')
 		.trim()
@@ -94,5 +104,8 @@ export const newPostValidator = [
 	body('category', 'post category is required')
 		.trim()
 		.isLength({ min: 3, max: 10 })
-		.withMessage('post category must be between 3 and 10'),
+		.withMessage('post category must be between 3 and 10')
+		.custom((value, { req }) => {
+			return postCategories.includes(value)
+		}).withMessage('This category does not exist'),
 ]
