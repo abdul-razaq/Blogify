@@ -27,8 +27,8 @@
     "swagger-ui-express": "^4.1.4"
   },
   "scripts": {
-    "dev": "nodemon -r esm app.js",
-    "start": "node -r esm app.js"
+    "dev": "nodemon -r esm src/app.js",
+    "start": "node -r esm src/app.js"
   },
   "devDependencies": {
     "chalk": "^4.0.0"

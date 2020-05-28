@@ -351,7 +351,7 @@
 		"/posts": {
 			"post": {
 				"tags": ["Posts"],
-				"summary": "Users can create posts",
+				"summary": "Authors can create posts",
 				"description": "This endpoint uses post request to create a new post",
 				"operationId": "createPost",
 				"consumes": ["application/x-www-form-urlencoded"],
@@ -405,6 +405,33 @@
 						"JWT": []
 					}
 				]
+			},
+			"get": {
+				"tags": ["Posts"],
+				"summary": "Author can fetch all created posts",
+				"description": "This endpoint uses get request to fetch all existing posts",
+				"operationId": "getAllPosts",
+				"consumes": ["application/json"],
+				"produces": ["application/json"],
+				"responses": {
+					"401": {
+						"description": "Invalid token, please authenticate"
+					},
+					"200": {
+						"description": "Posts found!"
+					},
+					"500": {
+						"description": "Internal server error / general error"
+					},
+					"404": {
+						"description": "This user has no post yet"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				]
 			}
 		},
 		"/posts/{postId}": {
@@ -440,9 +467,7 @@
 						"JWT": []
 					}
 				]
-			}
-		},
-		"/posts/{postID}": {
+			},
 			"get": {
 				"tags": ["Posts"],
 				"summary": "Authors can retrieve a post",
@@ -471,6 +496,35 @@
 					},
 					"404": {
 						"description": "Post not found"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				]
+			}
+		},
+		"/posts/feeds": {
+			"get": {
+				"tags": ["Posts"],
+				"summary": "Users can read all posts",
+				"description": "This endpoint uses get request to fetch all existing posts",
+				"operationId": "getFeeds",
+				"consumes": ["application/json"],
+				"produces": ["application/json"],
+				"responses": {
+					"401": {
+						"description": "Invalid token, please authenticate"
+					},
+					"200": {
+						"description": "Posts found!"
+					},
+					"500": {
+						"description": "Internal server error / general error"
+					},
+					"404": {
+						"description": "There are no feeds yet"
 					}
 				},
 				"security": [

@@ -5,7 +5,7 @@ import cors from 'cors'
 import swaggerUI from 'swagger-ui-express'
 import dotenv from 'dotenv'
 
-import swaggerDocument from './swagger.json'
+import swaggerDocument from '../swagger.json'
 import createTables from './configs/migrations'
 import Errors from './helpers/Errors/Errors'
 import authRoutes from './routes/users'
